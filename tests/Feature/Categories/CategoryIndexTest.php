@@ -10,7 +10,7 @@ class CategoryIndexTest extends TestCase
 {
     public function test_it_returns_a_collection_of_categories()
     {
-        $categories = Category::factory(2)->create();
+        $categories = Category::factory()->count(2)->create();
 
         $this->json('GET', 'api/categories')
             ->assertJsonFragment([
