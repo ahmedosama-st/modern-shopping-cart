@@ -3,7 +3,7 @@
 namespace Tests\Unit\Products;
 
 use Tests\TestCase;
-use App\Models\{Category, Product};
+use App\Models\{Category, Product, ProductVariation};
 
 class ProductTest extends TestCase
 {
@@ -17,6 +17,17 @@ class ProductTest extends TestCase
         $product = new Product();
 
         $this->assertEquals($product->getRouteKeyName(), 'slug');
+    }
+
+    public function test_it_has_many_variations()
+    {
+        $product = Product::factory()->create();
+
+        $product->variations()->save(
+            ProductVariation::factory()->create()
+        );
+
+        $this->assertInstanceOf(ProductVariation::class, $product->variations->first());
     }
 
     public function test_it_has_many_categories()

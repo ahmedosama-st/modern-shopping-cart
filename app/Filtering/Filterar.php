@@ -2,6 +2,7 @@
 
 namespace App\Filtering;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Filtering\Contracts\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,8 +18,8 @@ class Filterar
 
     public function apply(Builder $builder, array $filters)
     {
-        foreach ($filters as $key => $filter) {
-            if (!$filter instanceof Filter || !$this->request->has($key)) {
+        foreach ($this->limitFilters($filters) as $key => $filter) {
+            if (!$filter instanceof Filter) {
                 continue;
             }
 
@@ -26,5 +27,13 @@ class Filterar
         }
 
         return $builder;
+    }
+
+    protected function limitFilters(array $filters)
+    {
+        return Arr::only(
+            $filters,
+            array_keys($this->request->all())
+        );
     }
 }
