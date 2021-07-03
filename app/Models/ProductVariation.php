@@ -34,6 +34,11 @@ class ProductVariation extends Model
         return $this->price->amount() !== $this->product->price->amount();
     }
 
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
