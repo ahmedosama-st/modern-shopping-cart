@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasPrice;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory, Filterable;
+    use HasFactory, Filterable, HasPrice;
 
     public function getRouteKeyName()
     {
