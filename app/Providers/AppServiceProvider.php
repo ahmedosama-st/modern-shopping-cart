@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Cart\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(Cart::class, fn ($app) => new Cart($app->auth->user()));
     }
 
     /**

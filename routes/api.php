@@ -10,3 +10,5 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'Auth\LoginController@action');
     Route::get('me', 'Auth\MeController@action')->middleware('auth:api');
 });
+
+Route::resource('cart', 'Cart\CartController');

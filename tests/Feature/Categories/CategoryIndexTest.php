@@ -25,7 +25,7 @@ class CategoryIndexTest extends TestCase
         $category = Category::factory()->create();
 
         $category->children()->save(
-            Category::factory()->create()
+            Category::factory()->make()
         );
 
         $this->json('GET', 'api/categories')->assertJsonCount(1, 'data');
