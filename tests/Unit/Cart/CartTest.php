@@ -44,4 +44,55 @@ class CartTest extends TestCase
 
         $this->assertEquals($user->fresh()->cart->first()->pivot->quantity, 2);
     }
+
+    public function test_it_can_update_existing_products_in_cart()
+    {
+        $cart = new Cart(
+            $user = User::factory()->create()
+        );
+
+        $user->cart()->attach(
+            $product = ProductVariation::factory()->create(),
+            [
+                'quantity' => 1
+            ]
+        );
+
+        $cart->update($product->id, 2);
+
+        $this->assertEquals($user->fresh()->cart->first()->pivot->quantity, 2);
+    }
+
+    public function test_it_can_delete_a_product_from_the_cart()
+    {
+        $cart = new Cart(
+            $user = User::factory()->create()
+        );
+
+        $user->cart()->attach(
+            $product = ProductVariation::factory()->create(),
+            [
+                'quantity' => 2
+            ]
+        );
+
+        $cart->delete($product->id);
+
+        $this->assertCount(0, $user->fresh()->cart);
+    }
+
+    public function test_it_can_empty_the_cart()
+    {
+        $cart = new Cart(
+            $user = User::factory()->create()
+        );
+
+        $user->cart()->attach(
+            ProductVariation::factory()->create()
+        );
+
+        $cart->empty();
+
+        $this->assertCount(0, $user->fresh()->cart);
+    }
 }

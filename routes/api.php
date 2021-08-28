@@ -11,4 +11,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('me', 'Auth\MeController@action')->middleware('auth:api');
 });
 
-Route::resource('cart', 'Cart\CartController');
+Route::resource('cart', 'Cart\CartController', [
+    'parameters' => [
+        'cart' => 'productVariation'
+    ]
+]);

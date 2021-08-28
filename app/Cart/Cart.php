@@ -11,6 +11,23 @@ class Cart
         $this->user = $user;
     }
 
+    public function update($productId, $quantity)
+    {
+        $this->user->cart()->updateExistingPivot($productId, [
+            'quantity' => $quantity
+        ]);
+    }
+
+    public function delete($productId)
+    {
+        $this->user->cart()->detach($productId);
+    }
+
+    public function empty()
+    {
+        $this->user->cart()->detach();
+    }
+
     public function add($products)
     {
         $this->user->cart()->syncWithoutDetaching(
