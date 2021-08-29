@@ -21,7 +21,7 @@ class CartProductVariationResource extends ProductVariationResource
         return array_merge(parent::toArray($request), [
             'product' => new ProductIndexResource($this->product),
             'quantity' => $this->pivot->quantity,
-            'total' => $total->formatted()
+            'total' => $total->formatted(),
         ]);
     }
 }
