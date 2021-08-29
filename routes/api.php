@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('categories', 'CategoryController');
 Route::resource('products', 'ProductController');
+Route::resource('addresses', 'Addresses\AddressController');
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'Auth\RegisterController@action');
