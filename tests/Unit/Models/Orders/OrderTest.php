@@ -28,6 +28,15 @@ class OrderTest extends TestCase
         $this->assertInstanceOf(Address::class, $order->address);
     }
 
+    public function test_it_has_a_default_status_of_pending()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id
+        ]);
+
+        $this->assertEquals($order->status, Order::PENDING);
+    }
+
     public function test_it_belongs_to_a_shipping_method()
     {
         $order = Order::factory()->create([
