@@ -5,11 +5,14 @@ namespace App\Models;
 use App\Cart\Money;
 use App\Models\Traits\HasPrice;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Collections\ProductVariationCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductVariation extends Model
 {
     use HasFactory, HasPrice;
+
+    public $with = ['product'];
 
     public function getPriceAttribute($value)
     {
@@ -65,5 +68,10 @@ class ProductVariation extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function newCollection($models = [])
+    {
+        return new ProductVariationCollection($models);
     }
 }
