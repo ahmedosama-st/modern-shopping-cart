@@ -4,6 +4,7 @@ namespace Tests\Feature\Cart;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\ShippingMethod;
 use App\Models\ProductVariation;
 
 class CartIndexTest extends TestCase
@@ -56,6 +57,17 @@ class CartIndexTest extends TestCase
             ]);
     }
 
+    public function test_it_shows_a_formatted_total_with_shipping()
+    {
+        $user = User::factory()->create();
+
+        $shipping = ShippingMethod::factory()->create(['price' => 1000]);
+
+        $this->jsonAs($user, 'GET', "api/cart?shipping_method_id={$shipping->id}")
+            ->assertJsonFragment([
+                'total' => 'EGP 10.00'
+            ]);
+    }
     public function test_it_syncs_the_cart()
     {
         $user = User::factory()->create();

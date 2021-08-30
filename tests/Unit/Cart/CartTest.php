@@ -6,6 +6,7 @@ use App\Cart\Cart;
 use App\Cart\Money;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\ShippingMethod;
 use App\Models\ProductVariation;
 
 class CartTest extends TestCase
@@ -183,5 +184,39 @@ class CartTest extends TestCase
         $cart->sync();
 
         $this->assertTrue($cart->hasChanged());
+    }
+
+    public function test_it_can_return_the_correct_total_without_shipping()
+    {
+        $cart = new Cart(
+            $user = User::factory()->create()
+        );
+
+        $user->cart()->attach(
+            ProductVariation::factory()->create(['price' => 1000]),
+            [
+                'quantity' => 2
+            ]
+        );
+
+        $this->assertEquals($cart->total()->amount(), 2000);
+    }
+
+    public function test_it_can_return_the_correct_total_with_shipping()
+    {
+        $cart = new Cart(
+            $user = User::factory()->create()
+        );
+
+        $shipping = ShippingMethod::factory()->create(['price' => 1000]);
+
+        $user->cart()->attach(
+            ProductVariation::factory()->create(['price' => 1000]),
+            [
+                'quantity' => 2
+            ]
+        );
+
+        $this->assertEquals($cart->withShipping($shipping->id)->total()->amount(), 3000);
     }
 }
