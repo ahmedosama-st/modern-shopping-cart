@@ -6,6 +6,7 @@ Route::resource('categories', 'CategoryController');
 Route::resource('products', 'ProductController');
 Route::resource('addresses', 'Addresses\AddressController');
 Route::resource('countries', 'Countries\CountryController');
+Route::get('addresses/{address}/shipping', 'Addresses\AddressShippingController@action');
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'Auth\RegisterController@action');

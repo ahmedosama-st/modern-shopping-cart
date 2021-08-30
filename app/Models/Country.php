@@ -14,4 +14,9 @@ class Country extends Model
     protected $fillable = [
         'code', 'name'
     ];
+
+    public function shippingMethods()
+    {
+        return $this->belongsToMany(ShippingMethod::class);
+    }
 }
