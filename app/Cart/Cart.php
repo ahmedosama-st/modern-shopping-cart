@@ -16,6 +16,11 @@ class Cart
         $this->user = $user;
     }
 
+    public function products()
+    {
+        return $this->user->cart;
+    }
+
     public function update($productId, $quantity)
     {
         $this->user->cart()->updateExistingPivot($productId, [
