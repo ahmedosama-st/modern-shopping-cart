@@ -20,7 +20,8 @@ class Order extends Model
     protected $fillable = [
         'status',
         'address_id',
-        'shipping_method_id'
+        'shipping_method_id',
+        'subtotal'
     ];
 
     public static function boot()
@@ -30,6 +31,13 @@ class Order extends Model
         static::creating(function ($order) {
             $order->status = self::PENDING;
         });
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(ProductVariation::class, 'product_variation_order')
+            ->withPivot(['quantity'])
+            ->withTimestamps();
     }
 
     public function user()
