@@ -12,6 +12,6 @@ class ProductVariationCollection extends Collection
             return [
                 'quantity' => $product->pivot->quantity
             ];
-        });
+        })->toArray();
     }
 }
