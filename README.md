@@ -2,7 +2,7 @@
 
 An API using the [Laravel](http://laravel.com/) framework using most of the modern features and built in [TDD](https://en.wikipedia.org/wiki/Test-driven_development).
 
-The repository does not contain a client-side for now, but you can find the corresponding client using Vue.js [here]() and soon there will be a client using React.js
+The repository does not contain a client-side for now, but soon there will be a client using React.js/Vue.js
 
 ## Database structure
 
