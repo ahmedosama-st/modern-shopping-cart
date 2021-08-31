@@ -9,6 +9,8 @@ class Address extends Model
 {
     use HasFactory;
 
+    public $with  = ['country'];
+
     protected $fillable = [
         'name',
         'address_1',
