@@ -52,7 +52,7 @@ class OrderController extends Controller
         return $request->user()->orders()->create(
             array_merge(
                 $request->only(
-                    ['address_id', 'shipping_method_id']
+                    ['address_id', 'shipping_method_id', 'payment_method_id']
                 ),
                 [
                     'subtotal' => $cart->subtotal()->amount()
