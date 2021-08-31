@@ -32,7 +32,7 @@ class StripeGatewayCustomer implements GatewayCustomer
         $this->customer->default_source = $card->id;
         $this->customer->save();
 
-        $this->gateway->user()->paymentMethods()->create([
+        return $this->gateway->user()->paymentMethods()->create([
             'provider_id' => $card->id,
             'card_type' => $card->brand,
             'last_four' => $card->last4,
