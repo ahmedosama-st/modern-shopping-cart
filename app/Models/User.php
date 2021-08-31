@@ -66,6 +66,11 @@ class User extends Authenticatable implements JWTSubject
             ->withPivot('quantity');
     }
 
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
+
     public function addresses()
     {
         return $this->hasMany(Address::class);
