@@ -7,6 +7,8 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Address;
+use App\Models\Transaction;
+use App\Models\PaymentMethod;
 use App\Models\ShippingMethod;
 use App\Models\ProductVariation;
 
@@ -46,6 +48,29 @@ class OrderTest extends TestCase
         ]);
 
         $this->assertInstanceOf(ShippingMethod::class, $order->shippingMethod);
+    }
+
+    public function test_it_belongs_to_a_payment_method()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id
+        ]);
+
+        $this->assertInstanceOf(PaymentMethod::class, $order->paymentMethod);
+    }
+
+    public function test_it_has_many_transcations()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id
+        ]);
+
+        Transaction::factory()->create([
+            'order_id' => $order->id
+
+        ]);
+
+        $this->assertInstanceOf(Transaction::class, $order->transactions->first());
     }
 
     public function test_it_has_quantity_attached_to_the_products()
@@ -88,6 +113,7 @@ class OrderTest extends TestCase
 
         $this->assertInstanceOf(Money::class, $order->subtotal);
     }
+
     public function test_it_returns_a_money_instance_for_the_total()
     {
         $order = Order::factory()->create([
@@ -96,6 +122,7 @@ class OrderTest extends TestCase
 
         $this->assertInstanceOf(Money::class, $order->total());
     }
+
     public function test_it_returns_formatted_subtotal()
     {
         $order = Order::factory()->create([

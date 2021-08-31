@@ -66,4 +66,14 @@ class Order extends Model
     {
         return $this->belongsTo(ShippingMethod::class);
     }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
