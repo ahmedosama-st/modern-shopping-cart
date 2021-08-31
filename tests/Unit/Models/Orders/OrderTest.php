@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models\Orders;
 
+use App\Cart\Money;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Order;
@@ -77,5 +78,42 @@ class OrderTest extends TestCase
         );
 
         $this->assertInstanceOf(ProductVariation::class, $order->products->first());
+    }
+
+    public function test_it_returns_a_money_instance_for_the_subtotal()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id
+        ]);
+
+        $this->assertInstanceOf(Money::class, $order->subtotal);
+    }
+    public function test_it_returns_a_money_instance_for_the_total()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id
+        ]);
+
+        $this->assertInstanceOf(Money::class, $order->total());
+    }
+    public function test_it_returns_formatted_subtotal()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id,
+            'subtotal' => 1000
+        ]);
+
+        $this->assertEquals($order->subtotal->formatted(), 'EGP 10.00');
+    }
+
+    public function test_it_adds_shipping_to_total()
+    {
+        $order = Order::factory()->create([
+            'user_id' => User::factory()->create()->id,
+            'subtotal' => 1000,
+            'shipping_method_id' => ShippingMethod::factory()->create(['price' => 1000])->id
+        ]);
+
+        $this->assertEquals($order->total()->amount(), 2000);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Cart\Money;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -31,6 +32,16 @@ class Order extends Model
         static::creating(function ($order) {
             $order->status = self::PENDING;
         });
+    }
+
+    public function getSubtotalAttribute($subtotal)
+    {
+        return new Money($subtotal);
+    }
+
+    public function total()
+    {
+        return $this->subtotal->add($this->shippingMethod->price);
     }
 
     public function products()
