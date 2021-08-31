@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasDefault;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PaymentMethod extends Model
 {
-    use HasFactory;
+    use HasFactory, HasDefault;
 
     protected $casts = [
         'default' => 'bool'

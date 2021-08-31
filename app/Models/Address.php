@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasDefault;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Address extends Model
 {
-    use HasFactory;
+    use HasFactory, HasDefault;
 
     public $with  = ['country'];
 
@@ -24,24 +25,6 @@ class Address extends Model
     protected $casts = [
         'default' => 'bool'
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($address) {
-            if ($address->default) {
-                $address->user->addresses()->update([
-                    'default' => false
-                ]);
-            }
-        });
-    }
-
-    public function setDefaultAttribute($value)
-    {
-        $this->attributes['default'] = ($value === 'true' ? true : false);
-    }
 
     public function user()
     {
