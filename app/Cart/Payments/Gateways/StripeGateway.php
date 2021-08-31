@@ -4,6 +4,7 @@ namespace App\Cart\Payments\Gateways;
 
 use App\Models\User;
 use App\Cart\Payments\Gateway;
+use Stripe\Customer as StripeCustomer;
 
 class StripeGateway implements Gateway
 {
@@ -16,12 +17,41 @@ class StripeGateway implements Gateway
         return $this;
     }
 
+    protected function getCustomer()
+    {
+        return new StripeGatewayCustomer(
+            $this,
+            StripeCustomer::retrieve($this->user->gateway_customer_id)
+        );
+    }
+
+    public function user()
+    {
+        return $this->user;
+    }
+
     public function createCustomer()
     {
         if ($this->user->gateway_customer_id) {
-            return 'customer';
+            return $this->getCustomer();
         }
 
-        return new StripeGatewayCustomer();
+        $customer = new StripeGatewayCustomer(
+            $this,
+            $this->createStripeCustomer()
+        );
+
+        $this->user->update([
+            'gateway_customer_id' => $customer->id()
+        ]);
+
+        return $customer;
+    }
+
+    protected function createStripeCustomer()
+    {
+        return StripeCustomer::create([
+            'email' => $this->user->email
+        ]);
     }
 }

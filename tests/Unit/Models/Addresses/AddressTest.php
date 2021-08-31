@@ -37,9 +37,10 @@ class AddressTest extends TestCase
         ]);
 
         Address::factory()->create([
+            'default' => true,
             'user_id' => $user->id
         ]);
 
-        $this->assertFalse($oldAddress->fresh()->default);
+        $this->assertFalse((bool) $oldAddress->fresh()->default);
     }
 }

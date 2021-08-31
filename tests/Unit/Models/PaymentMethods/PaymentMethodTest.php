@@ -18,10 +18,11 @@ class PaymentMethodTest extends TestCase
         ]);
 
         PaymentMethod::factory()->create([
+            'default' => true,
             'user_id' => $user->id
         ]);
 
-        $this->assertFalse($oldPaymentMethod->fresh()->default);
+        $this->assertFalse((bool) $oldPaymentMethod->fresh()->default);
     }
 
     public function test_it_belongs_to_a_user()

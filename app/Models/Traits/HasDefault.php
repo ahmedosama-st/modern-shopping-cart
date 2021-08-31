@@ -8,9 +8,9 @@ trait HasDefault
     {
         parent::boot();
 
-        static::creating(function ($model) {
-            if ($model->default) {
-                $model->newQuery()->where('user_id', $model->user->id)->update([
+        static::creating(function ($address) {
+            if ($address->default) {
+                $address->newQuery()->where('user_id', $address->user->id)->update([
                     'default' => false
                 ]);
             }
@@ -19,6 +19,6 @@ trait HasDefault
 
     public function setDefaultAttribute($value)
     {
-        $this->attributes['default'] = ($value === 'true' ? true : false);
+        $this->attributes['default'] = ($value === 'true' || $value ? true : false);
     }
 }
