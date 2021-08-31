@@ -8,6 +8,8 @@ use App\Models\Stock;
 use App\Models\Address;
 use App\Models\ShippingMethod;
 use App\Models\ProductVariation;
+use App\Events\Orders\OrderCreated;
+use Illuminate\Support\Facades\Event;
 
 class OrderStoreTest extends TestCase
 {
@@ -103,12 +105,51 @@ class OrderStoreTest extends TestCase
 
         $response = $this->jsonAs($user, 'POST', 'api/orders', [
             'address_id' => $address->id,
-            'shipping_method_id' => $shipping->id
+            'shipping_method_id' => $shipping->id,
         ]);
 
         $this->assertDatabaseHas('product_variation_order', [
             'product_variation_id' => $product->id,
+            'order_id' => json_decode($response->getContent())->data->id
         ]);
+    }
+
+    public function test_it_fires_an_order_created_event()
+    {
+        Event::fake();
+
+        $user = User::factory()->create();
+
+        $user->cart()->sync(
+            $product = $this->productWithStock()
+        );
+
+        [$address, $shipping] = $this->orderDependencies($user);
+
+        $response = $this->jsonAs($user, 'POST', 'api/orders', [
+            'address_id' => $address->id,
+            'shipping_method_id' => $shipping->id
+        ]);
+
+        Event::assertDispatched(OrderCreated::class, fn ($event) => $event->order->id === json_decode($response->getContent())->data->id);
+    }
+
+    public function test_it_empties_the_cart_after_ordering()
+    {
+        $user = User::factory()->create();
+
+        $user->cart()->sync(
+            $product = $this->productWithStock()
+        );
+
+        [$address, $shipping] = $this->orderDependencies($user);
+
+        $response = $this->jsonAs($user, 'POST', 'api/orders', [
+            'address_id' => $address->id,
+            'shipping_method_id' => $shipping->id
+        ]);
+
+        $this->assertEmpty($user->cart);
     }
 
     public function test_it_requires_a_valid_shipping_method_that_exists_within_the_country_of_the_given_address()
@@ -142,7 +183,7 @@ class OrderStoreTest extends TestCase
         $this->jsonAs($user, 'POST', 'api/orders', [
             'address_id' => $address->id,
             'shipping_method_id' => $shipping->id
-        ])->assertStatus(200);
+        ])->assertStatus(201);
 
         $this->assertDatabaseHas('orders', [
             'user_id' => $user->id,
