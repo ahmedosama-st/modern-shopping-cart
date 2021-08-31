@@ -52,10 +52,14 @@ class Cart
 
     public function sync()
     {
+        $this->user->load(['cart.stock']);
+
         $this->user->cart->each(function ($product) {
             $quantity = $product->minStock($product->pivot->quantity);
 
-            $this->changed = $quantity != $product->pivot->quantity;
+            if ($quantity != $product->pivot->quantity) {
+                $this->changed = $quantity != $product->pivot->quantity;
+            }
 
             $product->pivot->update([
                 'quantity' => $quantity

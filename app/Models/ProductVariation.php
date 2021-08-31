@@ -12,8 +12,6 @@ class ProductVariation extends Model
 {
     use HasFactory, HasPrice;
 
-    public $with = ['product'];
-
     public function getPriceAttribute($value)
     {
         if ($value === null) {

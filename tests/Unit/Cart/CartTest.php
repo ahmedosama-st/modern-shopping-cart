@@ -156,12 +156,17 @@ class CartTest extends TestCase
             $user = User::factory()->create()
         );
 
-        $user->cart()->attach(
-            ProductVariation::factory()->create(),
-            [
+        $product = ProductVariation::factory()->create();
+        $anotherProduct = ProductVariation::factory()->create();
+
+        $user->cart()->attach([
+            $product->id => [
+                'quantity' => 2
+            ],
+            $anotherProduct->id => [
                 'quantity' => 2
             ]
-        );
+        ]);
 
         $cart->sync();
 
@@ -174,12 +179,17 @@ class CartTest extends TestCase
             $user = User::factory()->create()
         );
 
-        $user->cart()->attach(
-            ProductVariation::factory()->create(),
-            [
+        $product = ProductVariation::factory()->create();
+        $anotherProduct = ProductVariation::factory()->create();
+
+        $user->cart()->attach([
+            $product->id => [
                 'quantity' => 2
+            ],
+            $anotherProduct->id => [
+                'quantity' => 0
             ]
-        );
+        ]);
 
         $cart->sync();
 
