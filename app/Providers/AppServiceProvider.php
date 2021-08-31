@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use App\Cart\Cart;
+use Stripe\Stripe;
+use App\Cart\Payments\Gateway;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use App\Cart\Payments\Gateways\StripeGateway;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
 
             return new Cart($app->auth->user());
         });
+
+        $this->app->singleton(Gateway::class, fn () => new StripeGateway());
     }
 
     /**
@@ -36,5 +41,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Model::preventLazyLoading(!$this->app->isProduction());
+
+        Stripe::setApiKey(config('services.stripe.secret'));
     }
 }

@@ -14,8 +14,9 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
-        "tymon/jwt-auth": "^1.0",
-        "moneyphp/money": "^4.0"
+        "moneyphp/money": "^4.0",
+        "stripe/stripe-php": "^7.94",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
